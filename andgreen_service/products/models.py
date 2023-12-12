@@ -8,6 +8,7 @@ class Product(models.Model):
 
 class Device(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    description = models.CharField(max_length=256, null=True)
 
 
 class Reading(models.Model):

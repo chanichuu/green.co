@@ -25,7 +25,7 @@ urlpatterns = [
     path('service/', include('service.urls')),
     path('customers/', include('customers.urls')),
     path('products/', include('products.urls')),
-    path('main/', TemplateView.as_view(template_name="home.html"), name="home"),
+    path('main/', include('main.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     # API Schema:
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

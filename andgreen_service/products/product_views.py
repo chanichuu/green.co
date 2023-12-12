@@ -15,14 +15,14 @@ def route_product_requests_GET_POST(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def route_product_requests_GET_PUT_DELETE(request, id):
+def route_product_requests_GET_PUT_DELETE(request, pid):
     match request.method:
         case 'GET':
-            return get_product(request, id)
+            return get_product(request, pid)
         case 'PUT':
-            return update_product(request, id)
+            return update_product(request, pid)
         case 'DELETE':
-            return delete_product(request, id)
+            return delete_product(request, pid)
 
 
 def get_all_products(request):
@@ -47,14 +47,14 @@ def get_product(request, id):
     """
     try:
         product = Product.objects.get(id=id)
+        print(product.name)
+        return HttpResponse(
+            serializers.serialize("json", [product]),
+            content_type="application/json"
+        )
     except Product.DoesNotExist:
         product = None
         return HttpResponse('Product not found.', status=404)
-    
-    return HttpResponse(
-        serializers.serialize("json", product),
-        content_type="application/json"
-    )
 
 
 def create_product(request):
