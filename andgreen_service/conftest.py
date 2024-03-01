@@ -1,6 +1,24 @@
 # Define fixtures here
 import pytest
 from products.models import Product, Reading, Device
+from customers.models import Customer
+
+
+# Customers
+@pytest.fixture(scope="module")
+def create_test_customer(django_db_blocker):
+    with django_db_blocker.unblock():
+        test_product = Product.objects.create(
+            name="test-product", image_link="test-image-link"
+        )
+        customer = Customer.objects.create(
+            username="Test User",
+            email="test-user@gmail.com",
+            pw="testpw",
+            login_trials=5,
+        )
+        customer.products.set([test_product])
+        return customer
 
 
 # Products

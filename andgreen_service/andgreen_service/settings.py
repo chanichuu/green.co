@@ -57,7 +57,7 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "API documentation for Andgreen Service providing CRUD endpoints for customers, products, devices & readings",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
-    "COMPONENT_SPLIT_REQUEST": True
+    "COMPONENT_SPLIT_REQUEST": True,
     # OTHER SETTINGS
 }
 
@@ -149,3 +149,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = "/main/"
+
+APPEND_SLASH = False

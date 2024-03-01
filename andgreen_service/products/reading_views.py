@@ -51,21 +51,23 @@ def create_readings(request, pid, id):
                 % (csv_file.size / (1000 * 1000),),
                 status=400,
             )
-
         file_data = csv_file.read().decode("utf-8")
-
+        print(file_data)
         try:
             device = Device.objects.get(id=id)
             lines = file_data.split("\n")
+            print(len(lines))
             for line in lines:
-                fields = line.split(",")
-                Reading.objects.create(
-                    timestamp=fields[0],
-                    device=device,
-                    ppm_co2_water=fields[1],
-                    ppm_co2_air=fields[2],
-                    water_temp=fields[3],
-                )
+                if line:
+                    fields = line.split(",")
+                    if fields:
+                        Reading.objects.create(
+                            timestamp=fields[0],
+                            device=device,
+                            ppm_co2_water=fields[1],
+                            ppm_co2_air=fields[2],
+                            water_temp=fields[3],
+                        )
         except Device.DoesNotExist:
             device = None
             return HttpResponse("Bad request: Device not found.", status=400)
