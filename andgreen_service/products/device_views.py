@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from products.models import Device, Product
 from django.core import serializers
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 import json
 
 
 @api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
 def route_device_requests_GET_POST(request, pid):
     match request.method:
         case "GET":
@@ -16,6 +18,7 @@ def route_device_requests_GET_POST(request, pid):
 
 
 @api_view(["GET", "PUT", "DELETE"])
+@permission_classes([IsAuthenticated])
 def route_device_requests_GET_PUT_DELETE(request, pid, id):
     match request.method:
         case "GET":

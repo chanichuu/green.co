@@ -2,13 +2,17 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from customers.models import Customer
 from django.core import serializers
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
+from rest_framework.permissions import IsAuthenticated
 import json
 
 
 @api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
 def route_customer_requests_GET_POST(request):
     match request.method:
         case "GET":
@@ -18,6 +22,7 @@ def route_customer_requests_GET_POST(request):
 
 
 @api_view(["GET", "PUT", "DELETE"])
+@permission_classes([IsAuthenticated])
 def route_customer_requests_GET_PUT_DELETE(request, id):
     match request.method:
         case "GET":

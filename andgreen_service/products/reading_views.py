@@ -1,12 +1,14 @@
 from django.http import HttpResponse
 from products.models import Product, Device
 from django.core import serializers
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from products.models import Reading
 import logging
 
 
 @api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
 def route_readings_requests_GET_POST(request, pid, id):
     match request.method:
         case "GET":
