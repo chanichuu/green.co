@@ -3,16 +3,16 @@ import json
 
 
 @pytest.mark.unit
-def test_device_views_get_all(client, create_test_device, db):
-    response = client.get("/products/1/devices")
+def test_device_views_get_all(api_client, create_test_device, db):
+    response = api_client.get("/products/1/devices")
     data = json.loads(response.content)
     assert response.status_code == 200
     assert len(data) >= 1
 
 
 @pytest.mark.unit
-def test_device_views_get_one(client, create_test_device, db):
-    response = client.get("/products/1/devices/1")
+def test_device_views_get_one(api_client, create_test_device, db):
+    response = api_client.get("/products/1/devices/1")
     data = json.loads(response.content)[0]
     print(data)
     assert response.status_code == 200
@@ -21,7 +21,7 @@ def test_device_views_get_one(client, create_test_device, db):
 
 
 @pytest.mark.unit
-def test_device_views_post(client, create_test_device, db):
+def test_device_views_post(api_client, create_test_device, db):
     product = {
         "name": "test-product",
         "image_link": "test-image-link",
@@ -30,9 +30,9 @@ def test_device_views_post(client, create_test_device, db):
         "description": "test-device",
         "product": product,
     }
-    response = client.post(
+    response = api_client.post(
         "/products/1/devices",
-        data,
+        json.dumps(data),
         content_type="application/json",
     )
     print(response)
@@ -40,7 +40,7 @@ def test_device_views_post(client, create_test_device, db):
 
 
 @pytest.mark.unit
-def test_device_views_put(client, create_test_device, db):
+def test_device_views_put(api_client, create_test_device, db):
     product = {
         "name": "test-product",
         "image_link": "test-image-link",
@@ -49,9 +49,9 @@ def test_device_views_put(client, create_test_device, db):
         "description": "test-device updated",
         "product": product,
     }
-    response = client.put(
+    response = api_client.put(
         "/products/1/devices/1",
-        data,
+        json.dumps(data),
         content_type="application/json",
     )
     data = json.loads(response.content)
@@ -60,6 +60,6 @@ def test_device_views_put(client, create_test_device, db):
 
 
 @pytest.mark.unit
-def test_device_views_delete(client, db):
-    response = client.delete("/products/1/devices/1")
+def test_device_views_delete(api_client, db):
+    response = api_client.delete("/products/1/devices/1")
     assert response.status_code == 204

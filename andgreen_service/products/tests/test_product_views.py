@@ -3,16 +3,16 @@ import json
 
 
 @pytest.mark.unit
-def test_products_views_get_all(client, create_test_product, db):
-    response = client.get("/products/")
+def test_products_views_get_all(api_client, create_test_product, db):
+    response = api_client.get("/products/")
     data = json.loads(response.content)
     assert response.status_code == 200
     assert len(data) >= 1
 
 
 @pytest.mark.unit
-def test_products_views_get_one(client, create_test_product, db):
-    response = client.get("/products/1")
+def test_products_views_get_one(api_client, create_test_product, db):
+    response = api_client.get("/products/1")
     data = json.loads(response.content)[0]
     assert response.status_code == 200
     assert data["pk"] == 1
@@ -21,14 +21,14 @@ def test_products_views_get_one(client, create_test_product, db):
 
 
 @pytest.mark.unit
-def test_product_views_post(client, create_test_product, db):
+def test_product_views_post(api_client, create_test_product, db):
     data = {
         "name": "test-product",
         "image_link": "test-image-link",
     }
-    response = client.post(
+    response = api_client.post(
         "/products/",
-        data,
+        json.dumps(data),
         content_type="application/json",
     )
     print(response)
@@ -36,22 +36,22 @@ def test_product_views_post(client, create_test_product, db):
 
 
 @pytest.mark.unit
-def test_product_views_put(client, create_test_product, db):
+def test_product_views_put(api_client, create_test_product, db):
     product = {
         "name": "test-product",
         "image_link": "test-image-link",
     }
-    response = client.put(
+    response = api_client.put(
         "/products/1",
-        product,
+        json.dumps(product),
         content_type="application/json",
     )
-    data = json.loads(response.content)
+    data = response.content
     assert response.status_code == 200
     assert len(data) >= 1
 
 
 @pytest.mark.unit
-def test_product_views_delete(client, db):
-    response = client.delete("/products/1")
+def test_product_views_delete(api_client, db):
+    response = api_client.delete("/products/1")
     assert response.status_code == 204
