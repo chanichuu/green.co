@@ -3,6 +3,7 @@ import json
 from customers.models import Customer
 
 
+# Positive Tests
 @pytest.mark.unit
 def test_customer_views_get_all(api_client, create_test_customer, db):
     response = api_client.get("/customers/")
@@ -63,3 +64,60 @@ def test_customer_views_put(api_client, create_test_customer, db):
 def test_customer_views_delete(api_client, db):
     response = api_client.delete("/customers/1")
     assert response.status_code == 204
+
+
+# Negative Tests
+@pytest.mark.unit
+def test_negative_customer_views_get_all_401(client):
+    response = client.get("/customers/")
+    data = json.loads(response.content)
+    assert response.status_code == 401
+
+
+@pytest.mark.unit
+def test_negative_customer_views_get_401(client):
+    response = client.get("/customers/1")
+    data = json.loads(response.content)
+    assert response.status_code == 401
+
+
+@pytest.mark.unit
+def test_negative_customer_views_post_401(client):
+    data = {
+        "username": "Test User",
+        "email": "testUser@gmail.com",
+        "pw": "testpassword",
+        "login_trials": 5,
+        "products": [],
+    }
+    response = client.post(
+        "/customers/",
+        json.dumps(data),
+        content_type="application/json",
+    )
+
+    assert response.status_code == 401
+
+
+@pytest.mark.unit
+def test_negative_customer_views_put_401(client):
+    customer = {
+        "username": "Test User Updated",
+        "email": "testUserUpdated@gmail.com",
+        "pw": "testpasswordUpdated",
+        "login_trials": 5,
+        "products": [],
+    }
+    response = client.put(
+        "/customers/1",
+        json.dumps(customer),
+        content_type="application/json",
+    )
+    data = json.loads(response.content)
+    assert response.status_code == 401
+
+
+@pytest.mark.unit
+def test_negative_customer_views_delete_401(client):
+    response = client.delete("/customers/1")
+    assert response.status_code == 401

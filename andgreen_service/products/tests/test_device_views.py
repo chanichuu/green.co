@@ -2,6 +2,7 @@ import pytest
 import json
 
 
+# Positive Tests
 @pytest.mark.unit
 def test_device_views_get_all(api_client, create_test_device, db):
     response = api_client.get("/products/1/devices")
@@ -63,3 +64,61 @@ def test_device_views_put(api_client, create_test_device, db):
 def test_device_views_delete(api_client, db):
     response = api_client.delete("/products/1/devices/1")
     assert response.status_code == 204
+
+
+# Negative Tests
+@pytest.mark.unit
+def test_negative_device_views_get_all_401(client):
+    response = client.get("/products/1/devices")
+    data = json.loads(response.content)
+    assert response.status_code == 401
+
+
+@pytest.mark.unit
+def test_negative_device_views_get_one_401(client):
+    response = client.get("/products/1/devices/1")
+    data = json.loads(response.content)
+    assert response.status_code == 401
+
+
+@pytest.mark.unit
+def test_negative_device_views_post_401(client):
+    product = {
+        "name": "test-product",
+        "image_link": "test-image-link",
+    }
+    data = {
+        "description": "test-device",
+        "product": product,
+    }
+    response = client.post(
+        "/products/1/devices",
+        json.dumps(data),
+        content_type="application/json",
+    )
+    assert response.status_code == 401
+
+
+@pytest.mark.unit
+def test_negative_device_views_put_401(client):
+    product = {
+        "name": "test-product",
+        "image_link": "test-image-link",
+    }
+    data = {
+        "description": "test-device updated",
+        "product": product,
+    }
+    response = client.put(
+        "/products/1/devices/1",
+        json.dumps(data),
+        content_type="application/json",
+    )
+    data = json.loads(response.content)
+    assert response.status_code == 401
+
+
+@pytest.mark.unit
+def test_negative_device_views_delete_401(client):
+    response = client.delete("/products/1/devices/1")
+    assert response.status_code == 401

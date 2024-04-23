@@ -5,6 +5,7 @@ from customers.models import Customer
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
+import os
 
 
 # Customers
@@ -63,7 +64,9 @@ def create_test_readings(django_db_blocker):
 def api_client(django_db_blocker):
     with django_db_blocker.unblock():
         user = User.objects.create_user(
-            username="john", email="js@js.com", password="js.sj"
+            username=os.getenv("TEST_USERNAME"),
+            email=os.getenv("TEST_EMAIL"),
+            password=os.getenv("TEST_PASSW"),
         )
         client = APIClient()
         refresh = RefreshToken.for_user(user)

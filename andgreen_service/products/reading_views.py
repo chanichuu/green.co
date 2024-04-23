@@ -54,11 +54,9 @@ def create_readings(request, pid, id):
                 status=400,
             )
         file_data = csv_file.read().decode("utf-8")
-        print(file_data)
         try:
             device = Device.objects.get(id=id)
             lines = file_data.split("\n")
-            print(len(lines))
             for line in lines:
                 if line:
                     fields = line.split(",")
